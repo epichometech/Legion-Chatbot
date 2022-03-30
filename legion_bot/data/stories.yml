@@ -1,0 +1,48 @@
+version: "3.0"
+
+stories:
+
+- story: happy path
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: mood_great
+  - action: utter_happy
+  - action: utter_dad_joke
+  - intent: affirm
+  - action: action_dad_joke
+
+- story: sad path 1
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: mood_unhappy
+  - action: utter_cheer_up
+  - action: utter_did_that_help
+  - intent: affirm
+  - action: utter_happy
+  - action: utter_dad_joke
+  - intent: affirm
+  - action: action_dad_joke
+
+- story: sad path 2
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: mood_unhappy
+  - action: utter_cheer_up
+  - action: utter_did_that_help
+  - intent: deny
+  - action: utter_goodbye
+  - action: utter_dad_joke
+  - intent: affirm
+  - action: action_dad_joke
+
+- story: dad joke
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: dad_joke
+  - action: utter_dad_joke
+  - intent: affirm
+  - action: action_dad_joke
