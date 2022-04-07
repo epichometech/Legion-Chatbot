@@ -1,28 +1,29 @@
-import discord
-import json, sys, socket
+import json, sys, socket, os
 import parsers.discord.discord_parse as discord_parse
 from confluent_kafka import Producer
 
+import discord
+from discord.ext.commands import Bot
+
 client = discord.Client()
 
+KAFKA_SERVER = os.getenv('KAFKA_SERVER',default='kafka')
+KAFKA_PORT = os.getenv('KAFKA_PORT',default='9092')
+DISCORD_TOKEN = os.getenv('DISCORD_TOKEN',default=None)
+
 conf = {
-  'bootstrap.servers': "kafka:9092",
+  'bootstrap.servers': f'{KAFKA_SERVER}:{KAFKA_PORT}',
 }
 
 producer = Producer(conf)
 
-'''This needs to be changed to a full config to include kafka topics'''
-'''configuration file should be restructured to a yaml file located in the mounted volume'''
-with open('secrets.json') as secrets:
-  data = json.load(secrets)
-
 def delivery_callback(err, msg):
   if err:
-    sys.stderr.write('%% Message failed delivery: %s\n' % err)
+    sys.stderr.write(f'%% Message failed delivery: {err}\n')
 
 @client.event
 async def on_ready():
-    print('We have logged in as {0.user}'.format(client))
+    print(f'We have logged in as {client.user}')
 
 @client.event
 async def on_message(message):
@@ -40,4 +41,8 @@ async def on_message(message):
     producer.flush()
     print(f'Message sent')
 
-client.run(data['token'])
+if DISCORD_TOKEN:
+  client.run(DISCORD_TOKEN)
+else:
+  print('No discord token set. Set DISCORD_TOKEN and restart.')
+  sys.exit(1)

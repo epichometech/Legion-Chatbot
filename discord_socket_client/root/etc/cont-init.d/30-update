@@ -1,0 +1,8 @@
+#!/usr/bin/with-contenv bash
+
+if [[ -z "${DEV}" ]]; then
+  cd /app/discord_socket_client
+  git fetch
+  git checkout dev
+  git pull
+fi

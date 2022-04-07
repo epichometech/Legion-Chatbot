@@ -1,0 +1,4 @@
+#!/usr/bin/with-contenv bash
+
+exec \
+  s6-setuidgid abc python3 /app/Legion-Chatbot/discord_socket_client/discord_socket_client.py
