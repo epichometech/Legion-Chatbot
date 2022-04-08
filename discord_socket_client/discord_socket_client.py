@@ -17,7 +17,7 @@ TOPICS= [
   'discordMessagesIncoming'
 ]
 REDIS_SERVER = os.getenv('REDIS_SERVER',default='redis')
-REDIS_PORT = os.getenv('REDIS_PORT',default=10)
+REDIS_PORT = os.getenv('REDIS_PORT',default=6379)
 
 
 client = discord.Client()
