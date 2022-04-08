@@ -3,9 +3,10 @@ services:
   discord-socket-client:
     build: discord_socket_client/.
     environment:
-      - KAFKA_SERVER='redpanda'
+      - KAFKA_SERVER='redpanda-1'
       - KAFKA_PORT=29092
       - DISCORD_TOKEN=''
+    container_name: discord_client-1
   redpanda:
     command:
     - redpanda
