@@ -1,7 +1,7 @@
 #!/usr/bin/with-contenv bash
 
 if [[ -z "${DEV}" ]]; then
-  cd /app/discord_socket_client
+  cd /app/Legion-Chatbot
   git fetch
   git checkout dev
   git pull
