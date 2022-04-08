@@ -28,3 +28,17 @@ services:
     ports:
     - 9092:9092
     - 29092:29092
+  redis:
+    image: docker.io/bitnami/redis:latest
+    environment:
+      # ALLOW_EMPTY_PASSWORD is recommended only for development.
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
+    ports:
+      - '6379:6379'
+    volumes:
+      - 'redis_data:/bitnami/redis/data'
+    container_name: redis
+volumes:
+  redis_data:
+    driver: local

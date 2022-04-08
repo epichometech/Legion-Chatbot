@@ -1,3 +1,3 @@
 discord.py
-confluent-kafka
+kafka-python
 redis<4.2.0
