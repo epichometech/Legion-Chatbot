@@ -6,7 +6,9 @@ services:
       - KAFKA_SERVER='redpanda-1'
       - KAFKA_PORT=29092
       - DISCORD_TOKEN=''
-    container_name: discord_client-1
+    deploy:
+      mode: replicated
+      replicas: 2
   redpanda:
     command:
     - redpanda

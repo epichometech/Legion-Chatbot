@@ -18,7 +18,7 @@ TOPICS= [
 ]
 REDIS_SERVER = os.getenv('REDIS_SERVER',default='redis')
 REDIS_PORT = os.getenv('REDIS_PORT',default=6379)
-
+REDIS_ENABLE = os.getenv('REDIS_ENABLE', default=0)
 
 client = discord.Client()
 
@@ -36,6 +36,12 @@ async def on_message(message):
         #return
     try:
       parsedMessage = discord_parse.parse_discord_object(message)
+      if redisClient:
+        print('Redis client enabled')
+        if redisClient.zadd('discordIncomingMessages', message.created_at.timestamp(), message.id) > 0:
+          producer.send('discordMessagesIncoming',json.dumps(parsedMessage)).add_errback(on_errback)
+        else:
+          return
       producer.send('discordMessagesIncoming',json.dumps(parsedMessage)).add_errback(on_errback)
     except Exception as e:
       raise e
@@ -54,6 +60,13 @@ if __name__ == "__main__":
         print(f'Topic {item} is already created')
     admin.close()
     admin = None
+    if REDIS_ENABLE:
+      redisClient = redis.Redis(
+        host=REDIS_SERVER,
+        port=REDIS_PORT
+      )
+    else:
+      redisClient = None
     client.run(DISCORD_TOKEN)
   else:
     print('No discord token set. Set DISCORD_TOKEN and restart.')

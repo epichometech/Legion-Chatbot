@@ -13,5 +13,6 @@ def textMessage(message):
   retVal['edited_at'] = message.edited_at.isoformat() if message.edited_at else None
   retVal['activity'] = message.activity
   retVal['content'] = message.content
+  retVal['id'] = message.id
 
   return retVal
