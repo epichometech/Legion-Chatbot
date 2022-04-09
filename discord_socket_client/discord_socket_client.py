@@ -47,7 +47,6 @@ async def on_message(message):
         F.add_errback(on_errback)
     except Exception as e:
       raise e
-    print(f'Message sent')
 
 if __name__ == "__main__":
   if DISCORD_TOKEN:
