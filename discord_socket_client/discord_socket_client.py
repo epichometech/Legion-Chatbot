@@ -39,11 +39,11 @@ async def on_message(message):
       if redisClient:
         print('Redis client enabled')
         if redisClient.zadd('discordIncomingMessages', message.created_at.timestamp(), message.id) > 0:
-          F = producer.send('discordMessagesIncoming',json.dumps(parsedMessage))
+          F = producer.send('discordMessagesIncoming',parsedMessage)
           F.add_errback(on_errback)
         else:
           return
-      F = producer.send('discordMessagesIncoming',json.dumps(parsedMessage))
+      F = producer.send('discordMessagesIncoming',parsedMessage)
       F.add_errback(on_errback)
     except Exception as e:
       raise e
@@ -52,7 +52,10 @@ async def on_message(message):
 
 if __name__ == "__main__":
   if DISCORD_TOKEN:
-    producer = KafkaProducer(bootstrap_servers=[f'{KAFKA_SERVER}:{KAFKA_PORT}'])
+    producer = KafkaProducer(
+      bootstrap_servers=[f'{KAFKA_SERVER}:{KAFKA_PORT}'],
+      value_serializer=lambda v: json.dumps(v).encode('utf-8')
+    )
     admin = KafkaAdminClient(bootstrap_servers=[f'{KAFKA_SERVER}:{KAFKA_PORT}'])
     for item in TOPICS:
       try:
