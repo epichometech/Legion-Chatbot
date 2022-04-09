@@ -39,10 +39,12 @@ async def on_message(message):
       if redisClient:
         print('Redis client enabled')
         if redisClient.zadd('discordIncomingMessages', message.created_at.timestamp(), message.id) > 0:
-          producer.send('discordMessagesIncoming',json.dumps(parsedMessage)).add_errback(on_errback)
+          F = producer.send('discordMessagesIncoming',json.dumps(parsedMessage))
+          F.add_errback(on_errback)
         else:
           return
-      producer.send('discordMessagesIncoming',json.dumps(parsedMessage)).add_errback(on_errback)
+      F = producer.send('discordMessagesIncoming',json.dumps(parsedMessage)).add_errback(on_errback)
+      F.add_errback(on_errback)
     except Exception as e:
       raise e
     producer.flush()
