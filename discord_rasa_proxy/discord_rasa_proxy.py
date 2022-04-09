@@ -17,7 +17,7 @@ class KafkaPush2Rasa:
   def run(self):
     for msg in self.consumer:
       try:
-        print(f'Message received')
+        print(msg.value['content'])
       except SystemExit:
         break
 
