@@ -37,8 +37,7 @@ async def on_message(message):
     try:
       parsedMessage = discord_parse.parse_discord_object(message)
       if redisClient:
-        print('Redis client enabled')
-        if redisClient.zadd('discordIncomingMessages', {message.id:message.created_at.timestamp()}) > 0:
+        if redisClient.zadd('discordIncomingMessages', {message.id:message.created_at.timestamp()}, nx=True) > 0:
           F = producer.send('discordMessagesIncoming',parsedMessage)
           F.add_errback(on_errback)
         else:
