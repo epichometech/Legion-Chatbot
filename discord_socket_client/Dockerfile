@@ -1,6 +1,7 @@
 FROM ghcr.io/linuxserver/baseimage-ubuntu:focal
 
 ENV BRANCH=wip-v0.0-initial-push
+ENV PYTHONUNBUFFERED=1
 
 RUN apt-get update && apt-get install -y \
     python3-dev \
