@@ -43,7 +43,7 @@ async def on_message(message):
           F.add_errback(on_errback)
         else:
           return
-      F = producer.send('discordMessagesIncoming',json.dumps(parsedMessage)).add_errback(on_errback)
+      F = producer.send('discordMessagesIncoming',json.dumps(parsedMessage))
       F.add_errback(on_errback)
     except Exception as e:
       raise e
